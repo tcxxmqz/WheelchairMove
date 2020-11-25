@@ -8,6 +8,7 @@ from wheelchairmoving import *
 from udpfromunity import *
 from time import sleep
 import datetime
+import threading
 
 
 def wheelchair_debug(port, run_times, wheelchair_speed):
@@ -58,5 +59,7 @@ def wheelchair_run_straight(port):
 
 
 if __name__ == "__main__":
+    recv_thread = threading.Thread(target=log_from_unity)
+    recv_thread.start()
     wheelchair_run_straight("COM5")
     # wheelchair_debug("COM5", 2, 0.2)

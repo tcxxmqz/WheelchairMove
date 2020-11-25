@@ -1,9 +1,11 @@
 import socket
+from time import sleep
 
 
 def speed_form_unity():
     """
-    接收从unity传入的速度数据，此函数会监听本机网络端口8081，每调用一次会返回一次receive_data，udp网络传输的特点：你随便发，我想接就接。
+    接收从unity传入的速度数据，此函数会监听本机网络端口8081，每调用一次会返回一次receive_data，udp网络传输的特点：你随便发，我想接就接，
+    unity发送速度占用8080端口，此函数接收速度占用8081端口。
 
     Parameters
     ----------
@@ -29,19 +31,17 @@ def speed_form_unity():
 
 def log_from_unity():
     """
-    接收从unity传回的日志数据。
+    接收从unity中8083端口传回的日志数据，此函数占用8084端口接收。
 
     :return: 接收到的字符串数据
     """
+    while True:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.bind(("127.0.0.1", 8084))
 
-    s.bind(("127.0.0.1", 8082))
-
-    receive_data = s.recvfrom(1024)
-    receive_data = receive_data[0].decode()
-    print("3--unity_log:{}".format(receive_data))
-
-    s.close()
-
-    return receive_data
+        receive_data = s.recvfrom(1024)
+        receive_data = receive_data[0].decode()
+        print("3--unity_log:{}".format(receive_data))
+        s.close()
+        sleep(0.1)
