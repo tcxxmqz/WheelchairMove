@@ -35,13 +35,19 @@ def log_from_unity():
 
     :return: 接收到的字符串数据
     """
+
+    with open("./log/unity_log.txt", "a") as unity_log:
+        unity_log.write("系统时间\t运行时间\t障碍物距离\t当前速度" + "\n")
+    unity_log.close()
+
     while True:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
         s.bind(("127.0.0.1", 8084))
-
         receive_data = s.recvfrom(1024)
         receive_data = receive_data[0].decode()
         print("3--unity_log:{}".format(receive_data))
+        with open("./log/unity_log.txt", "a") as unity_log:
+            unity_log.write(receive_data + "\n")
+        unity_log.close()
         s.close()
         sleep(0.1)
