@@ -4,8 +4,8 @@
 2020-11-19 designed by 戚震
 """
 
-from wheelchairmoving import *
-from udpfromunity import *
+from tools.wheelchairmoving import *
+from tools.udpfromunity import *
 from time import sleep
 import datetime
 import threading
@@ -31,7 +31,7 @@ def wheelchair_debug(port, run_times, wheelchair_speed):
             data = forward_straight_moving(wheelchair_speed)
             port_send_data(data, wheelchair_serial, wheelchair_speed)
         else:
-            print("2---true_speed = 0")
+            print("2---true_speed = 0.0")
         sleep(0.1)
 
 
@@ -54,7 +54,7 @@ def wheelchair_run_straight(port):
             data_send = forward_straight_moving(wheelchair_speed)
             port_send_data(data_send, wheelchair_serial, wheelchair_speed)
         else:
-            print("true_speed = 0.0")
+            print("2--true_speed = 0!!")
         sleep(0.1)
 
 
