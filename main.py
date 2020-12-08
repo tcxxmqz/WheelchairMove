@@ -4,11 +4,13 @@
 2020-11-19 designed by 戚震
 """
 
-from tools.wheelchairmoving import *
+from tools.wheelchair import *
 from tools.udpfromunity import *
 from time import sleep
 import datetime
 import threading
+
+global recv_data
 
 
 def wheelchair_debug(port, run_times, wheelchair_speed):
@@ -58,8 +60,28 @@ def wheelchair_run_straight(port):
         sleep(0.1)
 
 
+def recv_from_port(port, out="None"):
+    wheelchair_serial = port_init(port)
+    # recv_data_init(wheelchair_serial, out=out)
+
+    while True:
+        recv_data_init(wheelchair_serial, out=out)
+        recv_data = wheelchair_serial.read_until()
+        # print(datetime.datetime.now())
+        print("recv_data = {}".format(recv_data))
+        log_from_port(recv_data)
+        sleep(0.09)
+
+
 if __name__ == "__main__":
-    recv_thread = threading.Thread(target=log_from_unity)
-    recv_thread.start()
-    wheelchair_run_straight("COM5")
+    # 需要接收从unity传来的数据时，需要开一个线程，防止接收函数阻滞。
+    # recv_thread = threading.Thread(target=log_from_unity)
+    # recv_thread.start()
+
+    # wheelchair_run_straight("COM5")
     # wheelchair_debug("COM5", 2, 0.2)
+
+    # recv_thread = threading.Thread(target=log_from_port())
+    # recv_thread.start()
+
+    recv_from_port("COM5", out="out2")
