@@ -218,7 +218,8 @@ def log_from_port(receive_data):
     """
 
     with open("./log/recvdata_log.txt", "a") as unity_log:
-        unity_log.write(str(datetime.datetime.now()) + "\t" + str(receive_data) + "\n")
+        # unity_log.write(str(datetime.datetime.now()) + "\t" + str(receive_data) + "\n")
+        unity_log.write(datetime.datetime.now().strftime("%m-%d %H:%M:%S") + "\t" + str(receive_data) + "\n")
     # unity_log.close()
 
 

@@ -62,6 +62,14 @@ def wheelchair_run_straight(port):
 
 
 def recv_from_port(port, out="None"):
+    """
+    需要接收从轮椅串口传来的数据时使用，输入串口号，需要的数据类型，打印数据到控制台并保存到./log/recvdata_log.txt
+
+    :param port: 串口号
+    :param out: 数据类型，out2为控制杆数据
+    :return: 无
+    """
+
     wheelchair_serial = port_init(port)
     # recv_data_init(wheelchair_serial, out=out)
 
@@ -77,7 +85,14 @@ def recv_from_port(port, out="None"):
         sleep(0.09)
 
 
-def send_control_code_to_unity(port, out="None"):
+def send_control_code_to_unity(port, out="out2"):
+    """
+    将串口接收的控制杆数据解析并通过udp传入unity，实现控制杆同时控制轮椅与unity中的轮椅。
+
+    :param port: 串口号
+    :param out: out2：控制杆数据
+    :return: 无
+    """
 
     wheelchair_serial = port_init(port)
     # recv_data_init(wheelchair_serial, out=out)
@@ -92,21 +107,28 @@ def send_control_code_to_unity(port, out="None"):
         print("operator = {}".format(operator[1]))
         print("recv_data = {}".format(recv_data))
 
-        log_from_port(operator)
+        log_from_port(operator[1])
         sleep(0.09)
 
 
 if __name__ == "__main__":
 
     # 需要接收从unity传来的数据时，需要开一个线程，防止接收函数阻滞。
+
+    # 轮椅直线运行实验时使用
     # recv_thread = threading.Thread(target=log_from_unity)
     # recv_thread.start()
-
     # wheelchair_run_straight("COM5")
+
+    # 轮椅调试运行时使用
+    # recv_thread = threading.Thread(target=log_from_unity)
+    # recv_thread.start()
     # wheelchair_debug("COM5", 2, 0.2)
 
+    # 接收轮椅相关串口数据时使用
     # recv_thread = threading.Thread(target=log_from_port())
     # recv_thread.start()
     # recv_from_port("COM5", out="out2")
 
+    # 控制杆控制轮椅与unity轮椅时使用
     send_control_code_to_unity("COM5", out="out2")

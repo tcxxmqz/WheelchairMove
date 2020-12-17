@@ -1,10 +1,10 @@
 def control_code(recv_data):
     """
     串口数据传入此函数，传出控制指令字符串。
-    例如：传入b'1_OP:0,2,2,0,0,0\r\n'，解析出000
+    例如：传入b'1_OP:0,2,2,0,0,1\r\n'，解析出('R', '右旋')
 
-    :param recv_data:
-    :return:
+    :param recv_data: 串口接收到的二进制数据
+    :return: 传送到unity的控制码，以及中文控制码，返回的是元组
     """
     if recv_data != b'':
         recv_data_code = []
@@ -75,7 +75,6 @@ def control_code(recv_data):
 
 
 if __name__ == "__main__":
-    # a = b'1_OP:0,2,2,0,0,1\r\n'
-    a = ""
+    a = b'1_OP:0,2,2,0,0,1\r\n'
     b = control_code(a)
     print(b)
