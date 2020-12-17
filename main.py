@@ -6,6 +6,7 @@
 
 from tools.wheelchair import *
 from tools.udpfromunity import *
+from tools.ctrlcodefromserial import *
 from time import sleep
 import datetime
 import threading
@@ -67,13 +68,36 @@ def recv_from_port(port, out="None"):
     while True:
         recv_data_init(wheelchair_serial, out=out)
         recv_data = wheelchair_serial.read_until()
+
         # print(datetime.datetime.now())
+
         print("recv_data = {}".format(recv_data))
+
         log_from_port(recv_data)
         sleep(0.09)
 
 
+def send_control_code_to_unity(port, out="None"):
+
+    wheelchair_serial = port_init(port)
+    # recv_data_init(wheelchair_serial, out=out)
+
+    while True:
+        recv_data_init(wheelchair_serial, out=out)
+        recv_data = wheelchair_serial.read_until()
+
+        # print(datetime.datetime.now())
+        operator = control_code(recv_data)
+        control_code_to_unity_udp(operator[0])
+        print("operator = {}".format(operator[1]))
+        print("recv_data = {}".format(recv_data))
+
+        log_from_port(operator)
+        sleep(0.09)
+
+
 if __name__ == "__main__":
+
     # 需要接收从unity传来的数据时，需要开一个线程，防止接收函数阻滞。
     # recv_thread = threading.Thread(target=log_from_unity)
     # recv_thread.start()
@@ -83,5 +107,6 @@ if __name__ == "__main__":
 
     # recv_thread = threading.Thread(target=log_from_port())
     # recv_thread.start()
+    # recv_from_port("COM5", out="out2")
 
-    recv_from_port("COM5", out="out2")
+    send_control_code_to_unity("COM5", out="out2")

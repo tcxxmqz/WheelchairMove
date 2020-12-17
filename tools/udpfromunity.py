@@ -29,6 +29,14 @@ def speed_form_unity():
     return receive_data
 
 
+def control_code_to_unity_udp(control_code):
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(("127.0.0.1", 8085))
+    s.sendto(bytes(control_code, "ascii"), ("127.0.0.1", 8082))
+    s.close()
+
+
 def log_from_unity():
     """
     接收从unity中8083端口传回的日志数据，此函数占用8084端口接收。
