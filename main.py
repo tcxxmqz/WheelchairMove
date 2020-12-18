@@ -95,7 +95,6 @@ def send_control_code_to_unity(port, out="out2"):
     """
 
     wheelchair_serial = port_init(port)
-    # recv_data_init(wheelchair_serial, out=out)
 
     while True:
         recv_data_init(wheelchair_serial, out=out)
