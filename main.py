@@ -107,7 +107,7 @@ def send_control_code_to_unity(port, out="out2"):
         print("operator = {}".format(operator[1]))
         print("recv_data = {}".format(recv_data))
 
-        log_from_port(operator[1])
+        # log_from_port(operator[1])
         sleep(0.09)
 
 
@@ -131,4 +131,6 @@ if __name__ == "__main__":
     # recv_from_port("COM5", out="out2")
 
     # 控制杆控制轮椅与unity轮椅时使用
+    recv_thread = threading.Thread(target=log_from_unity)
+    recv_thread.start()
     send_control_code_to_unity("COM5", out="out2")
