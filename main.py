@@ -106,7 +106,7 @@ def send_control_code_to_unity(port, out="out2"):
         print("operator = {}".format(operator[1]))
         print("recv_data = {}".format(recv_data))
 
-        # log_from_port(operator[1])
+        log_from_port(operator[1])  # 存操作码到./log/recvdata_log.txt
         sleep(0.09)
 
 
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     # wheelchair_debug("COM5", 2, 0.2)
 
     # 接收轮椅相关串口数据时使用
-    # recv_thread = threading.Thread(target=log_from_port())
+    # recv_thread = threading.Thread(target=log_from_port)
     # recv_thread.start()
     # recv_from_port("COM5", out="out2")
 
