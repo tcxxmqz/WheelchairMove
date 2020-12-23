@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/WheelchairMove.iml" filepath="$PROJECT_DIR$/.idea/WheelchairMove.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../others/tcp-udp-sockets/.idea/tcp-udp-sockets.iml" filepath="$PROJECT_DIR$/../others/tcp-udp-sockets/.idea/tcp-udp-sockets.iml" />
     </modules>
   </component>
 </project>

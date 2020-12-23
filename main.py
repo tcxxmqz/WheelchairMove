@@ -7,11 +7,14 @@
 from tools.wheelchair import *
 from tools.udpfromunity import *
 from tools.ctrlcodefromserial import *
+from tools.tcpformunity import *
 from time import sleep
 import datetime
 import threading
 
 global recv_data
+global tcpSockets
+global sever_IP
 
 
 def wheelchair_debug(port, run_times, wheelchair_speed):
@@ -110,6 +113,26 @@ def send_control_code_to_unity(port, out="out2"):
         sleep(0.09)
 
 
+def send_control_code_to_unity_tcp(port, out="out2"):
+
+    severIP = ("127.0.0.1", 8083)
+    tcpSockets = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    tcpSockets.bind(("127.0.0.1", 8085))
+    tcpSockets.connect(severIP)
+    recv_thread = threading.Thread(target=log_from_unity_tcp, args=(severIP,))
+    recv_thread.start()
+    wheelchair_serial = port_init(port)
+
+    while True:
+        recv_data_init(wheelchair_serial, out=out)
+        recv_data = wheelchair_serial.read_until()
+        operator = control_code(recv_data)
+        print("operator = {}".format(operator[0]))
+        log_from_port(operator[0])  # 存操作码到./log/recvdata_log.txt
+        tcpSockets.sendto(bytes(operator[0], "ascii"), severIP)
+        sleep(0.098)
+
+
 if __name__ == "__main__":
 
     # 需要接收从unity传来的数据时，需要开一个线程，防止接收函数阻滞。
@@ -129,7 +152,10 @@ if __name__ == "__main__":
     # recv_thread.start()
     # recv_from_port("COM5", out="out2")
 
-    # 控制杆控制轮椅与unity轮椅时使用
-    recv_thread = threading.Thread(target=log_from_unity)
-    recv_thread.start()
-    send_control_code_to_unity("COM5", out="out2")
+    # 控制杆控制轮椅与unity轮椅时使用，udp传输
+    # recv_thread = threading.Thread(target=log_from_unity)
+    # recv_thread.start()
+    # send_control_code_to_unity("COM5", out="out2")
+
+    # 控制杆控制轮椅与unity轮椅时使用，tcp传输
+    send_control_code_to_unity_tcp("COM5", out="out2")

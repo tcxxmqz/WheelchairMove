@@ -24,11 +24,11 @@ def control_code(recv_data):
     else:
         control_code_str = "000"
 
-    control = ""
+    control = "null"
     operate = "无"
 
     if control_code_str == "000":
-        control = ""
+        control = "null"
         operate = "无操作"
 
     elif control_code_str == "010":
@@ -75,6 +75,6 @@ def control_code(recv_data):
 
 
 if __name__ == "__main__":
-    a = b'1_OP:0,2,2,0,0,1\r\n'
+    a = b'1_OP:0,2,2,0,0,0\r\n'
     b = control_code(a)
     print(b)

@@ -214,7 +214,7 @@ def log_from_port(receive_data):
     从串口接收到的数据存入日志文件
 
     :param receive_data: 接收到的数据
-    :return:
+    :return:无
     """
 
     with open("./log/recvdata_log.txt", "a") as unity_log:
