@@ -88,7 +88,7 @@ def recv_from_port(port, out="None"):
         sleep(0.09)
 
 
-def send_control_code_to_unity(port, out="out2"):
+def send_control_code_to_unity_udp(port, out="out2"):
     """
     将串口接收的控制杆数据解析并通过udp传入unity，实现控制杆同时控制轮椅与unity中的轮椅。
 
@@ -114,23 +114,39 @@ def send_control_code_to_unity(port, out="out2"):
 
 
 def send_control_code_to_unity_tcp(port, out="out2"):
+    """
+    轮椅控制杆操作信息串口传输到此脚本，然后tcp传输到unity控制虚拟轮椅运行。
 
+    :param port: 串口端口号
+    :param out: out2：控制杆数据
+    :return: 无
+    """
+
+    # unity端tcp服务器地址
     severIP = ("127.0.0.1", 8083)
+    # 控制码发送客户端，绑定8085端口
     tcpSockets = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     tcpSockets.bind(("127.0.0.1", 8085))
     tcpSockets.connect(severIP)
+    # 开启接收log线程，保存到./log/unity_log.txt
     recv_thread = threading.Thread(target=log_from_unity_tcp, args=(severIP,))
     recv_thread.start()
+    # 开启串口
     wheelchair_serial = port_init(port)
 
     while True:
+        # 每100ms向串口发送一个指令
         recv_data_init(wheelchair_serial, out=out)
+        # 等待接收串口回传
         recv_data = wheelchair_serial.read_until()
+        # 转换控制指令
         operator = control_code(recv_data)
-        print("operator = {}".format(operator[0]))
-        log_from_port(operator[0])  # 存操作码到./log/recvdata_log.txt
+        print("operator = {}".format(operator[1]))
+        # 存储串口信息
+        log_from_port(operator[1])  # 存操作码到./log/recvdata_log.txt
+        # 发送控制指令到unity
         tcpSockets.sendto(bytes(operator[0], "ascii"), severIP)
-        sleep(0.098)
+        sleep(0.099)
 
 
 if __name__ == "__main__":
@@ -155,7 +171,7 @@ if __name__ == "__main__":
     # 控制杆控制轮椅与unity轮椅时使用，udp传输
     # recv_thread = threading.Thread(target=log_from_unity)
     # recv_thread.start()
-    # send_control_code_to_unity("COM5", out="out2")
+    # send_control_code_to_unity_udp("COM5", out="out2")
 
     # 控制杆控制轮椅与unity轮椅时使用，tcp传输
     send_control_code_to_unity_tcp("COM5", out="out2")

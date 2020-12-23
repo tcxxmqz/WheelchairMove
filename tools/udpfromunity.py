@@ -30,6 +30,12 @@ def speed_form_unity():
 
 
 def control_code_to_unity_udp(control_code):
+    """
+    将控制指令通过udp传输到unity。
+
+    :param control_code: 控制指令
+    :return:
+    """
 
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.bind(("127.0.0.1", 8085))
